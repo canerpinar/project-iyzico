@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+Ödeme işlemi başarılı<br/>
+İşlem Detayları<br/>
+<table th:object="${buyer}" class="table">
+    <tr>
+        <th>Müşteri Ad</th>
+        <th>Müşteri Soyad</th>
+    </tr>
+    <tr>
+        <td th:text="*{name}"></td>
+        </td> <td th:text="*{surname}"></td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th>Ürün Adı</th>
+        <th>Kategori</th>
+        <th>Fiyat</th>
+    </tr>
+    <tr th:each="basketItem: ${basket}">
+        <td th:text="${basketItem.name}"></td>
+        <td th:text="${basketItem.category1}"></td>
+        <td th:text="${basketItem.price}"></td>
+    </tr>
+</table>
+<h5>Fatura Bilgileri</h5>
+<table class="table">
+    <tr>
+        <th>İl</th>
+        <th>İlçe</th>
+        <th>Açık Adres</th>
+    </tr>
+    <tr>
+        <td th:text="${billingAddress.country}"></td>
+        <td th:text="${billingAddress.city}"></td>
+        <td th:text="${billingAddress.address}"></td>
+    </tr>
+</table>
+</body>
+</html>

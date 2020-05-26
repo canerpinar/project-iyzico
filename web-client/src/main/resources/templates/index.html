@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="https://www.thymeleaf.org" ng-app="payment">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body  ng-controller="paymentController">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ürün</th>
+                    <th scope="col">Ürün Hakkında</th>
+                    <th scope="col">Fiyat</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="basketItem in urunler">
+                    <th scope="row">{{$index}}</th>
+                    <td>{{basketItem.name}}</td>
+                    <td>{{basketItem.category1}}</td>
+                    <td>{{basketItem.price}}</td>
+                    <td>
+                        <a ng-click="addUrun(basketItem,$index)" ng-if="!add[$index]" ng-model="add[$index]" style="cursor: pointer;">Sepete Ekle</a>
+                        <a ng-if="add[$index]" ng-click="subtractUrun(basketItem,$index)" style="cursor: pointer;">Çıkar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><a ng-show="IsVisible" ng-click="faturaBilgileri()">Ödeme Bilgilerini Giriniz</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ÜRÜN EKLENDİ MODAL -->
+<div id="successAddUrunModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ürün Eklendi.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p ng-bind="urunOwner"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="font-size: larger; stroke: #6f71aa; color: #8a3b12;">
+    <div>
+        <ul style="list-style-type: none;">
+            <li ng-repeat="urun in sepet">{{urun.name}}</li>
+        </ul>
+    </div>
+    Toplam : <h4 ng-bind="toplam"></h4>
+</div>
+<!--ÜRÜN EKLEME MODAL END -->
+
+<!-- Modal Fatura Bilgileri -->
+<div id="faturaInformation" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">İletişim Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <!--BUYER INFORMATION-->
+                <form action="/paymentSend" class="form-horizontal" method="POST">
+                    <input id="name" name="name" class="form-control" ng-model="name" type="text" placeHolder="Adınızı Giriniz." required="required"/>
+                    <input id="id" name="id" class="form-control" ng-model="id" type="hidden" value="1" required="required" />
+                    <input name="surname" class="form-control" ng-model="surname" type="text" placeHolder="Soyadınızı Giriniz." required="required"/>
+                    <input name="email" class="form-control" ng-model="email" type="email" placeHolder="Email Adresini Giriniz." required="required"/>
+                    <input name="phone" onkeypress="return keyNumberControl(target)" class="form-control" ng-model="phone" type="phone" placeHolder="Telefon Numarasını Giriniz." maxlength="10" minlength="10" required="required"/>
+                    <h5 class="modal-title" style="margin-bottom: 30px; margin-top: 10px;">Teslimat Bilgileri</h5>
+                    <!--BUYER INFORMATION END-->
+
+                    <input name="contactName" class="form-control" ng-model="contactName" type="text" required="required" placeHolder="Adınızı Soyadınız Giriniz." />
+                    <input name="identityNumber" onkeypress="return keyNumberControl(target)" class="form-control" ng-model="identityNumber" type="text" required="required" placeHolder="Kimlik NUmarasını Giriniz." />
+                    <input name="city" class="form-control" ng-model="city" type="text" required="required" placeHolder="İlçe Giriniz" />
+                    <input name="country" class="form-control" ng-model="country" type="text" required="required" placeHolder="İl Giriniz" />
+                    <input name="fullAddress" class="form-control" ng-model="fullAddress" required="required" type="text" placeHolder="Açık Adres Giriniz" />
+                    <input name="zipCode" ng-model="zipCode" onkeypress="return keyNumberControl(target)" type="text" class="form-control" required="required" placeholder="Zip Code Giriniz" minlength="5" maxlength="5"/>
+                    <!--
+
+
+                <textarea name="fullAddress" class="form-control" ng-model="fullAddress" placeHolder="Açık Adresinizi Giriniz." />
+-->
+                    <h5 class="modal-title" style="margin-bottom: 30px; margin-top: 10px;">Ödeme Bilgileri</h5>
+
+
+
+                    <div class="input-group" style="width: 100%;">
+                        <div class="col-sm-12">
+                            <input id="cardHolderName" style="" name="cardHolderName" class="form-control" ng-model="cardHolderName" type="text" placeHolder="Kart Sahibi Ad Soyad Giriniz." />
+                        </div>
+                        <span ng-show="false" for="cardHolderName" style="" class="col-sm-4 control-label">Adınızı giriniz.</span>
+                    </div>
+
+                    <div class="input-group" style="width: 100%;">
+                        <div id="cardNumberGroup" class="col-sm-12">
+                            <input id="cardNumber" ng-change="changeCardNumber(cardNumber)" onkeypress="return keyNumberControl(target)" required="required" minlength="16" maxlength="16" name="cardNumber" class="form-control" ng-model="cardNumber" type="text" placeHolder="Card Number Giriniz.  5526080000000006" />
+                        </div>
+                        <span ng-show="cardNumberError" for="cardNumber" style="white-space: nowrap; text-align: left; margin-left:-10px; font-size: 12px; height: 30px; margin-top:5px;" class="col-sm-4 control-label alert alert-warning ">Kart bulunamadı.</span>
+                    </div>
+
+                    <div class="input-group" style="width: 100%;">
+                        <div id="cardCCVGroup" class="col-sm-12">
+                            <input id="ccv" name="ccv" class="form-control" ng-model="ccv" required="required" onkeypress="return keyNumberControl(target)" minlength="3" maxlength="3" type="text" placeHolder="CCV Giriniz. 120 denendi" />
+                        </div>
+                        <span ng-show="cardCCV" for="ccv" style="white-space: nowrap; margin-left:-10px; font-size: 12px; height: 30px; margin-top:5px;" class="col-sm-4 control-label alert alert-warning">CCV numarası geçersiz.</span>
+                    </div>
+
+                    <div class="input-group" style="width: 100%;">
+                        <div id="cardMonthGroup" class="col-sm-12">
+                            <input id="expireMonth" name="expireMonth" class="form-control" onkeypress="return keyNumberControl(target)" ng-model="expireMonth" required="required" maxlength="2" minlength="2" type="text" placeHolder="Son Kullanma Ayı" />
+                        </div>
+                        <span ng-show="cardMonth" for="expireMonth" style="white-space: nowrap; margin-left:-10px; font-size: 12px; height: 30px; margin-top:5px;" class="col-sm-4 control-label alert alert-warning">Geçersiz lütfen kontrol ediniz.</span>
+                    </div>
+
+                    <div class="input-group" style="width: 100%;">
+                        <div id="cardYearGroup" class="col-sm-12">
+                            <input id="expireYear" name="expireYear" onkeypress="return keyNumberControl(target)" maxlength="4" minlength="4" required="required" type="text" class="form-control" ng-model="expireYear" placeHolder="Son Kullanma Yılı 2020 den büyük 2030 ile denendi" />
+                        </div>
+                        <span ng-show="cardYear" for="expireYear" style="white-space: nowrap; margin-left:-10px; font-size: 12px; height: 30px; margin-top:5px;" class="col-sm-4 control-label alert alert-warning">Geçersiz lütfen kontrol ediniz.</span>
+                    </div>
+
+
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="price in prices"  >
+                            <input ng-attr-id="{{'installment-' + price.installmentNumber}}" required="required" ng-change="selectInstallment(price.totalPrice,price.installmentNumber)" ng-model="totalPrice" type="radio" name="installment" ng-value="price.installmentNumber"/>{{price.installmentPrice + ' x '+ price.installmentNumber + ' = ' + price.totalPrice}}
+                        </li>
+                        <input name="totalPrice" ng-value="totalPrice" type="hidden"  />
+                    </ul>
+                    <input type="submit" class="btn btn-primary" value="Alışverişi Tamamla"/>
+                </form>
+            </div>
+
+            <!--
+            <div class="modal-footer">
+                <button ng-click="paymentComplete()" type="button" class="btn btn-primary">Alışverişi Tamamla</button>
+            </div>
+            -->
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <input id="error" type="hidden" th:value="${error}"/>
+</div>
+
+<div style="background-color: aqua;" th:text="${message}">
+</div>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Urun Id</th>
+        <th>Urun Ad</th>
+        <th>Urun Fiyat</th>
+    </tr>
+    <tr th:each="basketItem :${urunler}">
+        <td th:text="${basketItem.id}"></td>
+        <td th:text="${basketItem.name}"></td>
+        <td th:text="${basketItem.price}"></td>
+    </tr>
+
+</table>
+</body>
+</html>
