@@ -11,9 +11,9 @@
     <artifactId>web-client</artifactId>
     <description>Demo project for Spring Boot</description>
     <packaging>war</packaging>
+
     <properties>
         <java.version>1.8</java.version>
-
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
@@ -26,32 +26,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
-
-
-
-
         <dependency>
             <groupId>com.projects</groupId>
             <artifactId>service</artifactId>
             <version>1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+
     </dependencies>
 
     <build>
@@ -61,6 +42,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>webclient</finalName>
     </build>
 
 </project>

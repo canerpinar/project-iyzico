@@ -83,7 +83,7 @@
             </div>
             <div class="modal-body">
             <!--BUYER INFORMATION-->
-                <form action="/paymentSend" class="form-horizontal" method="POST">
+                <form action="paymentSend" class="form-horizontal" method="POST">
                     <input id="name" name="name" class="form-control" ng-model="name" type="text" placeHolder="Adınızı Giriniz." required="required"/>
                     <input id="id" name="id" class="form-control" ng-model="id" type="hidden" value="1" required="required" />
                     <input name="surname" class="form-control" ng-model="surname" type="text" placeHolder="Soyadınızı Giriniz." required="required"/>
@@ -97,6 +97,7 @@
                     <input name="city" class="form-control" ng-model="city" type="text" required="required" placeHolder="İlçe Giriniz" />
                     <input name="country" class="form-control" ng-model="country" type="text" required="required" placeHolder="İl Giriniz" />
                     <input name="fullAddress" class="form-control" ng-model="fullAddress" required="required" type="text" placeHolder="Açık Adres Giriniz" />
+
                     <input name="zipCode" ng-model="zipCode" onkeypress="return keyNumberControl(target)" type="text" class="form-control" required="required" placeholder="Zip Code Giriniz" minlength="5" maxlength="5"/>
                     <!--
 

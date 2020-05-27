@@ -30,7 +30,7 @@ app.controller("paymentController",["$scope","$http","$location",function($scope
 
 
     $scope.getLoadIndexPage = function(){
-        $http.get("/indexPage").then(function (response) {
+        $http.get("indexPage").then(function (response) {
             $scope.toplam=0;
             response.data.forEach(function (urun) {
                 console.log("EKLENMİŞ URUNLER  : " + JSON.stringify(urun));
@@ -54,7 +54,7 @@ app.controller("paymentController",["$scope","$http","$location",function($scope
                 params: {'cardNumber': $scope.cardNumber,'totalPrice' : $scope.toplam},
                 headers: 'application/json'
             };
-            $http.get("/installment", config).then(function (response) {
+            $http.get("installment", config).then(function (response) {
                 console.log(response.data);
                 var installmentDetails = response.data.installmentDetails;
                 console.log(JSON.stringify(installmentDetails));
@@ -175,14 +175,14 @@ app.controller("paymentController",["$scope","$http","$location",function($scope
     $scope.urunler = [];
     $scope.add = [];
     $scope.sepet= [];
-    $http.get("/urunler").then(function (response) {
+    $http.get("urunler").then(function (response) {
         $scope.urunler = response.data;
         console.log(response)
     });
 
     $scope.subtractUrun = function(basketItem,index){
 
-        $http.post("/subtractUrun",basketItem,{headers: {'Content-Type': 'application/json'}}).then(function (response) {
+        $http.post("subtractUrun",basketItem,{headers: {'Content-Type': 'application/json'}}).then(function (response) {
             $scope.toplam =0;
             $scope.add[index] = false;
             $scope.sepet = response.data;
@@ -195,7 +195,7 @@ app.controller("paymentController",["$scope","$http","$location",function($scope
         });
     }
     $scope.addUrun = function (basketItem,index) {
-        $http.post("/addUrun", basketItem, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
+        $http.post("addUrun", basketItem, {headers: {'Content-Type': 'application/json'}}).then(function (response) {
             $scope.toplam =0;
             const data = response.data;
             data.forEach(function (urun) {
@@ -241,7 +241,7 @@ app.controller("paymentController",["$scope","$http","$location",function($scope
         var postData = angular.toJson(buyer, true);
         console.log(JSON.stringify(postData));
 
-        $http.post("/paymentSend", postData, {
+        $http.post("paymentSend", postData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
